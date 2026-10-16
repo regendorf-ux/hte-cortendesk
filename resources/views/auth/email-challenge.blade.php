@@ -7,7 +7,7 @@
 
         <div class="card-header rd-auth-head py-3 text-center d-flex align-items-center justify-content-center">
             <a href="{{ url('/') }}" class="rd-auth-brand mb-0">
-                <img src="{{ asset('assets/images/cortendesk-sm.svg') }}" alt="CortenDesk" width="60" height="60" class="rd-auth-brand-logo">
+                <img src="{{ asset('assets/images/hte-remote.png') }}" alt="HTE Remote" width="60" height="60" class="rd-auth-brand-logo"> {{-- HTE --}}
                 <span class="rd-auth-brand-wordmark">Corten<span>Desk</span></span>
             </a>
         </div>

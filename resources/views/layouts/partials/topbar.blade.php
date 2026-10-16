@@ -5,7 +5,7 @@
             {{-- Only shown while the sidebar is off-canvas (phones). --}}
             <div class="rd-topbar-logo">
                 <a href="{{ route('overview') }}">
-                    <img src="{{ asset('assets/images/cortendesk-sm.svg') }}" alt="CortenDesk" height="28">
+                    @include('hte.brand.mark', ['size' => 'bar']) {{-- HTE --}}
                 </a>
             </div>
 
