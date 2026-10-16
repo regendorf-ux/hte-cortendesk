@@ -144,7 +144,7 @@ class ClientOidcController extends Controller
         if (! $pending || $pending->isExpired()) {
             return response()->view('auth.oidc-client-result', [
                 'ok' => false,
-                'message' => 'This sign-in request has expired. Start again from the RustDesk client.',
+                'message' => 'This sign-in request has expired. Start again from HTE Remote.' /* HTE */,
             ], 400);
         }
 
@@ -193,7 +193,7 @@ class ClientOidcController extends Controller
 
         return response()->view('auth.oidc-client-result', [
             'ok' => true,
-            'message' => 'You are signed in as '.$user->displayName().'. You can close this tab and return to RustDesk.',
+            'message' => 'You are signed in as '.$user->displayName().'. You can close this tab and return to HTE Remote.' /* HTE */,
         ]);
     }
 

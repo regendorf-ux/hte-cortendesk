@@ -14,6 +14,16 @@ test('the sign-in page is HTE Remote', function () {
     $this->get('/login')->assertSee('<b>@example.org</b> account', false);
 });
 
+test('the client sign-in result and the other sign-in pages say HTE Remote, in blue', function () {
+    foreach (['two-factor-challenge', 'password-request', 'password-reset', 'email-challenge', 'invite', 'oidc-client-result'] as $v) {
+        $src = file_get_contents(resource_path("views/auth/$v.blade.php"));
+        expect($src)->not->toContain('Corten<span>Desk</span>')->toContain('HTE <span>Remote</span>');
+    }
+    expect(file_get_contents(resource_path('views/auth/oidc-client-result.blade.php')))->toContain('Signed in to HTE Remote')->not->toContain('RustDesk');
+    expect(file_get_contents(resource_path('views/layouts/guest.blade.php')))->toContain('assets/css/hte-brand.css');
+    expect(file_get_contents(app_path('Http/Controllers/Api/ClientOidcController.php')))->toContain('return to HTE Remote.');
+});
+
 test('console pages carry the mark, the blue accent and no CortenDesk in the chrome', function () {
     $f = hteFixture();
     $html = $this->actingAs($f['osvaldo'])->get('/devices/'.$f['front']->id)->assertOk()
