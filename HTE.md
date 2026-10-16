@@ -5,6 +5,30 @@ for HTE Remote. Branch `hte` = the upstream release tag plus the commits below. 
 statement of modifications the AGPL asks for (section 5(a)), kept apart from upstream's history so
 merges stay clean. The ID server side is [regendorf-ux/hte-cortendesk-server](https://github.com/regendorf-ux/hte-cortendesk-server).
 
+## 1.14.0-hte.3 (2026-10-16) on upstream 1.14.0
+
+**Each computer gets its own password, made and changed by the console** (`app/Hte/Passwords.php`,
+`DevicePassword.php`, `PasswordsSweep.php`, `DevicePasswordActions.php`, migration
+`2026_10_16_900001_create_hte_device_passwords_table.php`):
+
+- The HTE Remote client (regendorf-ux/hte-remote, `patches/hte_pw.rs`) sends `hte_pw` (the version it
+  holds) with every check-in; the console answers `hte_password` = {v, box} until it reports the newest.
+  `box` is a libsodium sealed box to the computer's own ed25519 key as hbbs registered it (read from
+  hbbs's peer table, `/data/rustdesk/db_v2.sqlite3`), so a spoofed check-in learns nothing.
+- Confirmed passwords go into one shared book per person, "HTE Remote", readable only by them, with
+  exactly the computers they may reach (`Device::visibleTo`); another person's book is never listed to
+  the client, admins included (`AddressBookController::accessibleSharedBooks`, one `reject`).
+- `hte:passwords` (every minute): a new password on schedule (7/30/90 days or only on access loss) and
+  at once when someone loses access to a computer; then the books are refreshed. "Change now" on the
+  device page (administrators).
+- Settings → Server: the switch and the schedule (`hte_pw_enabled`, `hte_pw_days`); the device page's
+  "Who can reach this device" card has a "Password" row.
+- Hooks: `SyncController::heartbeat` (one line), `AddressBookController` (one line),
+  `routes/console.php` (register + schedule), `DeviceDetail` (`use` the trait), the two HTE blades.
+- Tests: `tests/Hte/PasswordsTest.php` (sealed delivery opened with the computer's key and refused
+  with another's, confirmation, spoofed uuid, books and their visibility through the client API,
+  rotation on access loss and schedule, the UI).
+
 ## 1.14.0-hte.2 (2026-10-16) on upstream 1.14.0
 
 - **Sessions close when access shrinks** (`app/Hte/ReachSweep.php`, `hte:reach-sweep`, every 15 s
