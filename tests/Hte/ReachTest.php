@@ -124,3 +124,36 @@ test('hbbs reports a refusal and the console keeps it as an admin-only alarm', f
 
     $this->withToken('wrong')->postJson('/api/server/refusals', ['refusals' => []])->assertStatus(401);
 });
+
+test('an administrator turns the switch on from Settings and sees it on the device page', function () {
+    $f = hteFixture();
+    $this->actingAs($f['osvaldo']);
+
+    $this->get('/settings')->assertOk()
+        ->assertSee('Each person may reach only the devices they are given')
+        ->assertSee('Off: scoping only decides what each person sees');
+
+    \Livewire\Livewire::actingAs($f['osvaldo'])->test(\App\Livewire\SettingsPage::class)
+        ->assertSet('hteScopeEnforce', false)
+        ->set('hteScopeEnforce', true)
+        ->call('save')
+        ->assertHasNoErrors();
+    expect(Reach::enforced())->toBeTrue();
+    expect(\App\Models\ConsoleAudit::where('action', 'settings.hte-scope')->exists())->toBeTrue();
+
+    $this->get('/devices/'.$f['front']->id)->assertOk()
+        ->assertSee('Who can reach this device')
+        ->assertSee('Enforced')
+        ->assertSee('Osvaldo Durán')
+        ->assertSee('María Pérez')
+        ->assertSee('via user group Support')
+        ->assertSee('Juan Rivera')
+        ->assertDontSee('Luis Gómez');
+});
+
+test('a regular person does not get the card and cannot post refusals', function () {
+    $f = hteFixture();
+    $this->actingAs($f['maria']);
+    $this->get('/devices/'.$f['front']->id)->assertOk()->assertDontSee('Who can reach this device');
+    $this->postJson('/api/server/refusals', ['refusals' => [['to' => '100000001']]])->assertStatus(401);
+});
