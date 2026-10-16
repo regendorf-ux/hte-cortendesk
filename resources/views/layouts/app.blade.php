@@ -5,9 +5,9 @@
     <meta charset="utf-8"/>
     <title>@yield('title', 'Console') | {{ config('app.name') }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CortenDesk — self-hosted RustDesk server console"/>
+    <meta name="description" content="HTE Remote — remote support for HTE, Inc."/>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="shortcut icon" href="{{ \App\Support\Asset::url('assets/images/cortendesk-sm.svg') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ \App\Support\Asset::url('assets/images/hte-remote.png') }}"> {{-- HTE --}}
 
     <!-- Theme + sidebar state before first paint (no flash) -->
     <script src="{{ \App\Support\Asset::url('assets/js/theme-init.js') }}"></script>
@@ -18,6 +18,7 @@
     <link href="{{ \App\Support\Asset::url('assets/css/spacing.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ \App\Support\Asset::url('assets/css/shell.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ \App\Support\Asset::url('assets/css/cortendesk.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ \App\Support\Asset::url('assets/css/hte-brand.css') }}" rel="stylesheet" type="text/css"/> {{-- HTE: blue accent, the mark --}}
 </head>
 
 <body>
@@ -36,7 +37,7 @@
                             <div class="rd-page-head">
                                 <div class="rd-page-crumbs">
                                     <ol class="breadcrumb m-0">
-                                        <li class="breadcrumb-item"><a href="{{ route('overview') }}">CortenDesk</a></li>
+                                        <li class="breadcrumb-item"><a href="{{ route('overview') }}">HTE Remote</a></li>
                                         @hasSection('subtitle')
                                             <li class="breadcrumb-item"><a href="javascript:void(0);">@yield('subtitle')</a></li>
                                         @endif
@@ -57,11 +58,11 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-6">
-                            <script>document.write(new Date().getFullYear())</script> © CortenDesk
+                            <script>document.write(new Date().getFullYear())</script> © HTE, Inc.
                         </div>
                         <div class="col-md-6">
                             <div class="text-md-end d-none d-md-block">
-                                <span class="text-muted">Self-hosted RustDesk console</span>
+                                <span class="text-muted">HTE Remote — remote support</span>
                             </div>
                         </div>
                     </div>

@@ -5,6 +5,27 @@ for HTE Remote. Branch `hte` = the upstream release tag plus the commits below. 
 statement of modifications the AGPL asks for (section 5(a)), kept apart from upstream's history so
 merges stay clean. The ID server side is [regendorf-ux/hte-cortendesk-server](https://github.com/regendorf-ux/hte-cortendesk-server).
 
+## 1.14.0-hte.4 (2026-10-16) on upstream 1.14.0
+
+**HTE Remote's branding lives in the fork** (Osvaldo: blue accent, HTE Remote mark and name, sidebar
+colours unchanged):
+
+- `public/assets/css/hte-brand.css` (new): CortenDesk's orange accent variables set to HTE blue
+  (`--rd-accent` #0a66e8 and its rgb/soft/ink/hover, `--rd-shell-accent` #3b8dff dark / #0a66e8 light),
+  and the mark's styles. Loaded after `cortendesk.css` by `layouts/app.blade.php` (one line).
+- `resources/views/hte/brand/mark.blade.php` (new): the icon with the wordmark "HTE Remote" ("Remote" in
+  the accent); `public/assets/images/hte-remote.png` (new).
+- Hooks: `layouts/partials/sidebar.blade.php` (the two logos, one `@include` each; the release-check
+  tooltip no longer names CortenDesk), `layouts/partials/topbar.blade.php` (one `@include`),
+  `layouts/app.blade.php` (favicon, description, breadcrumb "HTE Remote", footer "© HTE, Inc." / "HTE
+  Remote — remote support", the stylesheet), the logo `<img>` in six auth views (email-challenge, invite,
+  password-reset, oidc-client-result, two-factor-challenge, password-request).
+- **Whole files replaced** (were bind-mounted on the VPS until this release): `layouts/guest.blade.php`
+  and `auth/login.blade.php` (the sign-in pages in the suite's welcome-card theme with Microsoft's
+  button), plus `public/assets/css/hte-auth.css` (new). An upstream change to either view conflicts at
+  the rebase: take upstream's change into HTE's version by hand.
+- Test: `tests/Hte/BrandTest.php`.
+
 ## 1.14.0-hte.3 (2026-10-16) on upstream 1.14.0
 
 **Each computer gets its own password, made and changed by the console** (`app/Hte/Passwords.php`,
