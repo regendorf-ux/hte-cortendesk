@@ -5,6 +5,27 @@ for HTE Remote. Branch `hte` = the upstream release tag plus the commits below. 
 statement of modifications the AGPL asks for (section 5(a)), kept apart from upstream's history so
 merges stay clean. The ID server side is [regendorf-ux/hte-cortendesk-server](https://github.com/regendorf-ux/hte-cortendesk-server).
 
+## 1.14.0-hte.2 (2026-10-16) on upstream 1.14.0
+
+- **Sessions close when access shrinks** (`app/Hte/ReachSweep.php`, `hte:reach-sweep`, every 15 s
+  while per-person reach is on): an open session is closed through the console's own disconnect
+  (the one Active Sessions uses; the controlled device closes it at its next check-in) when nobody
+  signed in on the device that opened it may still reach the target: a grant or group membership
+  removed, the device moved, the person disabled, logged out or signed out of the client. If any
+  person signed in there may reach it, it stays. Sessions from the web client are left alone (the
+  console cannot tell who is behind them). Each close is an alarm (type 103, "Session closed:
+  access removed") and a system line in the console log. Hooks: `routes/console.php` (register +
+  schedule), `app/Models/AlarmLog.php` (type 103).
+- **Direct IP connections can be switched off from a Strategy**: `direct-server` added to
+  `Strategy::OPTION_KEYS` and labelled "Accept direct IP connections" in the editor
+  (`app/Livewire/StrategyList.php`). Upstream keeps network keys out of strategies because a wrong
+  server address strands devices; this key only closes the target's own direct listener, so every
+  session goes through the ID server. HTE's default strategy sets it off on every device, the Macs
+  on stock RustDesk included.
+- The image runs the server 1.1.1-hte.2 and sets `HTE_RELAY_GATE_PORT=21120`, so the relay pairs
+  only sessions hbbs admitted.
+- Tests: `tests/Hte/ReachTest.php` now 13 (the sweep, the strategy key, the schedule).
+
 ## 1.14.0-hte.1 (2026-10-16) on upstream 1.14.0
 
 **Per-person reach, enforced by the ID server.** The console already decides which devices a

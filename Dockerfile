@@ -15,7 +15,7 @@
 # has its own release cadence, and a console release should never quietly
 # change which server it ships.
 # HTE: the HTE build of the server (per-person reach), regendorf-ux/hte-cortendesk-server.
-ARG SERVER_VERSION=1.1.1-hte.1
+ARG SERVER_VERSION=1.1.1-hte.2
 FROM ghcr.io/regendorf-ux/hte-cortendesk-server:${SERVER_VERSION} AS server
 
 # ---- stage 1: composer dependencies -----------------------------------------
@@ -78,8 +78,10 @@ ENV APP_ENV=production \
 
 # Carried through so the console can report which server it is running, and so
 # `docker inspect` answers the question without a shell.
-ARG SERVER_VERSION=1.1.1-hte.1
+ARG SERVER_VERSION=1.1.1-hte.2
 ENV CORTENDESK_SERVER_VERSION=${SERVER_VERSION}
+# HTE: the relay pairs only sessions hbbs admitted (hte_relay_gate; loopback only). Empty = off.
+ENV HTE_RELAY_GATE_PORT=21120
 
 # 8080 console/API (CORTENDESK_HTTP_PORT moves it; EXPOSE is only a hint).
 # 21115 NAT test, 21116 tcp+udp signalling, 21118 ws (hbbs);

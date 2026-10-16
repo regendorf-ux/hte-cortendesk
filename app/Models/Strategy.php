@@ -109,6 +109,7 @@ class Strategy extends Model
         'temporary-password-length' => ['group' => 'security', 'type' => 'enum', 'values' => ['', '6', '8', '10']],
         'allow-numeric-one-time-password' => ['group' => 'security', 'type' => 'bool'],
         'whitelist' => ['group' => 'security', 'type' => 'string'],
+        'direct-server' => ['group' => 'security', 'type' => 'bool'], // HTE: sessions only through the ID server
         'allow-only-conn-window-open' => ['group' => 'security', 'type' => 'bool'],
         'enable-trusted-devices' => ['group' => 'security', 'type' => 'bool'],
         'allow-remote-config-modification' => ['group' => 'security', 'type' => 'bool'],

@@ -185,6 +185,7 @@ class StrategyList extends Component
             'label' => 'IP whitelist',
             'help' => 'Comma-separated IPs or CIDRs that may connect; empty means allow all. Entries that do not parse simply never match, so a typo here can lock everyone out of the device.',
         ],
+        'direct-server' => ['label' => 'Accept direct IP connections', 'help' => 'Off: every session goes through the ID server, where per-person reach is checked. HTE keeps this off on every device.'], // HTE
         'allow-only-conn-window-open' => ['label' => 'Only accept while the client window is open', 'help' => 'Desktop only.'],
         'enable-trusted-devices' => ['label' => 'Offer "trust this device" on 2FA'],
         // Client wording is "Enable remote configuration modification". Ours
