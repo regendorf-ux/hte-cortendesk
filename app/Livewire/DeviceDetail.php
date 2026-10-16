@@ -28,6 +28,7 @@ use Livewire\Component;
 class DeviceDetail extends Component
 {
     use AuthorizesConsole, DeletesDevices, EditsDevices;
+    use \App\Hte\DevicePasswordActions; // HTE: per-computer passwords
 
     public int $deviceId;
 

@@ -16,13 +16,20 @@ trait ScopeSettings
 {
     public bool $hteScopeEnforce = false;
 
+    public bool $htePasswords = false;
+
+    public int $htePasswordDays = 30;
+
     public function mountScopeSettings(): void
     {
         $this->hteScopeEnforce = Reach::enforced();
+        $this->htePasswords = Passwords::enabled();
+        $this->htePasswordDays = Passwords::days();
     }
 
     public function hteSave(): void
     {
+        $this->hteSavePasswords();
         if ($this->hteScopeEnforce === Reach::enforced()) {
             return;
         }
@@ -33,6 +40,19 @@ trait ScopeSettings
             'settings',
             null,
         );
+    }
+
+    private function hteSavePasswords(): void
+    {
+        $days = array_key_exists($this->htePasswordDays, Passwords::DAY_CHOICES) ? $this->htePasswordDays : 30;
+        if ($days !== Passwords::days()) {
+            Setting::put(Passwords::SETTING_DAYS, (string) $days);
+            ConsoleAudit::record('settings.hte-passwords', 'Computer passwords change: '.Passwords::DAY_CHOICES[$days], 'settings', null);
+        }
+        if ($this->htePasswords !== Passwords::enabled()) {
+            Setting::put(Passwords::SETTING_ENABLED, $this->htePasswords ? '1' : '0');
+            ConsoleAudit::record('settings.hte-passwords', 'Each computer '.($this->htePasswords ? 'gets' : 'no longer gets').' its own password from the console', 'settings', null);
+        }
     }
 
     /**

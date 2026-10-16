@@ -31,6 +31,8 @@ Schedule::command('cortendesk:prune-invitations')->dailyAt('04:20');
 // Sessions on devices that have gone silent (issue #10). Frequent, not nightly:
 // this drives what the dashboard reports as happening right now.
 \Illuminate\Console\Application::starting(fn ($artisan) => $artisan->resolve(\App\Hte\ReachSweep::class)); // HTE: per-person reach
+\Illuminate\Console\Application::starting(fn ($artisan) => $artisan->resolve(\App\Hte\PasswordsSweep::class)); // HTE: per-computer passwords
+Schedule::command(\App\Hte\PasswordsSweep::class)->everyMinute()->withoutOverlapping(5); // HTE: per-computer passwords
 Schedule::command(\App\Hte\ReachSweep::class)->everyFifteenSeconds()->withoutOverlapping(1); // HTE: per-person reach
 Schedule::command('cortendesk:close-stale-sessions')->everyFiveMinutes()->withoutOverlapping(30, $releaseOnSignals);
 

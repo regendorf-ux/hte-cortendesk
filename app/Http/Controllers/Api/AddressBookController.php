@@ -380,6 +380,7 @@ class AddressBookController extends Controller
                 return ['book' => $book, 'rule' => $this->ruleFor($book, $user, $groupIds)];
             })
             ->filter(fn (array $row) => $row['rule'] > 0)
+            ->reject(fn (array $row) => \App\Hte\Passwords::hiddenBookFor($row['book'], $user)) // HTE: per-computer passwords
             ->sortBy(fn (array $row) => $row['book']->name)
             ->values();
     }
