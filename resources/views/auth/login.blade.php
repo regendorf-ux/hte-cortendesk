@@ -21,7 +21,7 @@
     <div class="wcard">
         <img class="wicon" src="{{ \App\Support\Asset::url('assets/images/hte-remote.png') }}" alt="">
         <h1>Welcome to HTE Remote</h1>
-        <p>Remote support for HTE, Inc.'s computers. Sign in with your <b>@example.com</b> account to see the office computers and connect.</p>
+        <p>Remote support for HTE, Inc.'s computers. Sign in with your @if (config('hte.signin_domain'))<b>{{ '@'.config('hte.signin_domain') }}</b> account @else work Microsoft account @endif to see the office computers and connect.</p>
 
         @if ($httpsOnly ?? false)
             <div class="alert alert-warning w-100 mb-0" role="alert">

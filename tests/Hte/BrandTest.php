@@ -8,7 +8,10 @@ test('the sign-in page is HTE Remote', function () {
         ->assertSee('Welcome to HTE Remote')
         ->assertSee('assets/css/hte-auth.css', false)
         ->assertSee('assets/images/hte-remote.png', false)
-        ->assertDontSee('cortendesk-sm.svg', false);
+        ->assertDontSee('cortendesk-sm.svg', false)
+        ->assertSee('work Microsoft account');
+    config(['hte.signin_domain' => 'example.org']);
+    $this->get('/login')->assertSee('<b>@example.org</b> account', false);
 });
 
 test('console pages carry the mark, the blue accent and no CortenDesk in the chrome', function () {
