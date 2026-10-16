@@ -31,6 +31,7 @@ class AlarmLog extends Model
         100 => ['label' => 'Console brute force', 'severity' => 'danger'],
         101 => ['label' => 'Console password spraying', 'severity' => 'danger'],
         102 => ['label' => "Session refused: outside the person's access", 'severity' => 'danger'], // HTE: per-person reach
+        103 => ['label' => 'Session closed: access removed', 'severity' => 'warning'], // HTE: per-person reach
     ];
 
     /** Repeated failed sign-ins against one console account. */

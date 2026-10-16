@@ -157,3 +157,89 @@ test('a regular person does not get the card and cannot post refusals', function
     $this->get('/devices/'.$f['front']->id)->assertOk()->assertDontSee('Who can reach this device');
     $this->postJson('/api/server/refusals', ['refusals' => [['to' => '100000001']]])->assertStatus(401);
 });
+
+// ---- the sweep: sessions close when access shrinks ------------------------
+
+function hteSession(string $from, string $to, int $conn = 1): \App\Models\AuditConnection
+{
+    return \App\Models\AuditConnection::create([
+        'action' => 'authorized', 'conn_id' => $conn, 'rustdesk_id' => $to, 'from_peer' => $from,
+        'from_name' => 'test', 'conn_type' => 0, 'session_id' => 'sess-'.$conn, 'uuid' => 'u-'.$conn, 'ip' => '10.0.0.5',
+    ]);
+}
+
+test('the sweep does nothing while enforcement is off', function () {
+    $f = hteFixture();
+    $s = hteSession('100000002', '555000111');
+    // Luis is signed in on the Mac and may not reach the server.
+    ClientToken::where('user_id', '!=', $f['luis']->id)->delete();
+    $this->artisan('hte:reach-sweep')->assertSuccessful();
+    expect($s->fresh()->disconnect_requested_at)->toBeNull();
+});
+
+test('a session stays while someone signed in there may reach the device', function () {
+    $f = hteFixture();
+    Setting::put(Reach::SETTING, '1');
+    // Every fixture person is signed in on the Mac, Osvaldo (admin) among them.
+    $s = hteSession('100000002', '555000111');
+    $this->artisan('hte:reach-sweep')->assertSuccessful();
+    expect($s->fresh()->disconnect_requested_at)->toBeNull();
+
+    // Only Juan left there: Support still holds Accounting PCs.
+    ClientToken::where('user_id', '!=', $f['juan']->id)->delete();
+    $this->artisan('hte:reach-sweep')->assertSuccessful();
+    expect($s->fresh()->disconnect_requested_at)->toBeNull();
+});
+
+test('a removed grant closes the session and leaves an alarm', function () {
+    $f = hteFixture();
+    Setting::put(Reach::SETTING, '1');
+    ClientToken::where('user_id', '!=', $f['juan']->id)->delete();
+    $s = hteSession('100000002', '555000111', 7);
+
+    // Juan leaves Support.
+    DB::table('user_group_user')->where('user_id', $f['juan']->id)->delete();
+    $this->artisan('hte:reach-sweep')->assertSuccessful();
+
+    $s->refresh();
+    expect($s->disconnect_requested_at)->not->toBeNull()
+        ->and($s->disconnect_requested_by)->toBeNull();
+    expect(\App\Models\AuditConnection::pendingDisconnectsFor('555000111'))->toBe([7]);
+    $alarm = AlarmLog::where('typ', \App\Hte\ReachSweep::ALARM_TYPE)->latest('id')->first();
+    expect($alarm->infoPairs())->toMatchArray(['from' => '100000002', 'to' => '555000111'])
+        ->and($alarm->infoPairs()['reason'])->toContain('jrivera may no longer reach');
+
+    // Asked once: a second sweep does not ask again.
+    $this->artisan('hte:reach-sweep')->assertSuccessful();
+    expect(AlarmLog::where('typ', \App\Hte\ReachSweep::ALARM_TYPE)->count())->toBe(1);
+});
+
+test('a disabled or signed-out person loses the session; the web client is left alone', function () {
+    $f = hteFixture();
+    Setting::put(Reach::SETTING, '1');
+    ClientToken::where('user_id', '!=', $f['maria']->id)->delete();
+    $front = hteSession('100000002', '100000001', 1);
+    $web = hteSession('web-8f3a', '100000001', 2);
+
+    $this->artisan('hte:reach-sweep')->assertSuccessful();
+    expect($front->fresh()->disconnect_requested_at)->toBeNull();
+
+    $f['maria']->update(['is_active' => false]);
+    $this->artisan('hte:reach-sweep')->assertSuccessful();
+    expect($front->fresh()->disconnect_requested_at)->not->toBeNull()
+        ->and($web->fresh()->disconnect_requested_at)->toBeNull();
+    expect(\App\Hte\ReachSweep::verdict(hteSession('100000002', '100000001', 3)))->toContain('disabled');
+
+    ClientToken::query()->delete();
+    expect(\App\Hte\ReachSweep::verdict(hteSession('100000002', '100000001', 4)))->toContain('nobody is signed in');
+});
+
+test('direct IP connections can be switched off from a strategy', function () {
+    expect(\App\Models\Strategy::sanitizeOptions(['direct-server' => 'N', 'custom-rendezvous-server' => 'evil']))
+        ->toBe(['direct-server' => 'N']);
+});
+
+test('the sweep is scheduled', function () {
+    $events = collect(app(\Illuminate\Console\Scheduling\Schedule::class)->events());
+    expect($events->contains(fn ($e) => str_contains((string) $e->command, 'hte:reach-sweep')))->toBeTrue();
+});
