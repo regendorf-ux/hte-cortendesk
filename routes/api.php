@@ -107,6 +107,7 @@ Route::middleware([VerifyServerSecret::class, 'throttle:600,1,server-link'])
     ->group(function () {
         Route::get('/policy', [ServerLinkController::class, 'policy']);
         Route::post('/local-addrs', [ServerLinkController::class, 'localAddrs']);
+        Route::post('/refusals', [\App\Hte\RefusalsController::class, 'store']); // HTE: per-person reach
     });
 
 /*

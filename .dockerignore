@@ -23,3 +23,6 @@ tests
 Dockerfile
 docker-compose.yml
 /test
+
+# HTE: the HTE test suite ships in the build context (docker/hte-test.Dockerfile).
+!tests

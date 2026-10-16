@@ -140,6 +140,8 @@
                 </div>
             </div>
 
+            @include('hte.device-reach', ['device' => $device]) {{-- HTE: per-person reach --}}
+
             {{-- Note: the one editable field here. Everything else is either
                  client-reported or has its own screen. --}}
             <div class="card">
