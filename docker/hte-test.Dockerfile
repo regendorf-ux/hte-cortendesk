@@ -5,7 +5,7 @@ WORKDIR /app
 COPY composer.json composer.lock ./
 RUN composer install --no-scripts --no-autoloader --prefer-dist --no-interaction
 COPY . .
-RUN mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/testing \
+RUN cp -n .env.example .env && mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/testing \
       storage/framework/views storage/logs storage/app/private storage/app/public bootstrap/cache \
     && composer dump-autoload
 
