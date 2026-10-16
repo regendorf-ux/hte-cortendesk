@@ -104,7 +104,7 @@ test('each person gets one HTE Remote book with exactly the computers they may r
     expect($ids($f['maria']))->toBe(['100000001'])
         ->and($ids($f['juan']))->toBe(['100000001', '555000111'])
         ->and($ids($f['luis']))->toBe([])
-        ->and($ids($f['osvaldo']))->toBe(['100000002', '100000001', '555000111']);
+        ->and($ids($f['osvaldo']))->toBe(['100000001', '100000002', '555000111']);
 
     $front = AddressBookEntry::where('address_book_id', $bookOf($f['maria'])->id)->first();
     $confirmed = Crypt::decryptString(DevicePassword::where('rustdesk_id', '100000001')->first()->confirmed_enc);
