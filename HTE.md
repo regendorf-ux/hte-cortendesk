@@ -5,6 +5,9 @@ for HTE Remote. Branch `hte` = the upstream release tag plus the commits below. 
 statement of modifications the AGPL asks for (section 5(a)), kept apart from upstream's history so
 merges stay clean. The ID server side is [regendorf-ux/hte-cortendesk-server](https://github.com/regendorf-ux/hte-cortendesk-server).
 
+
+**What this repository may hold (Osvaldo, 2026-10-16):** HTE's code and placeholders, nothing else. HTE's server addresses, keys, e-mail domain, device IDs and host names live in `/opt/cortendesk/.env` on the VPS, the Mac's gitignored files, the private hte-apps repository and GitHub secrets. The history was rewritten on 2026-10-16 to take out what had been committed.
+
 ## 1.14.0-hte.4 (2026-10-16) on upstream 1.14.0
 
 **HTE Remote's branding lives in the fork** (Osvaldo: blue accent, HTE Remote mark and name, sidebar
@@ -24,6 +27,8 @@ colours unchanged):
   and `auth/login.blade.php` (the sign-in pages in the suite's welcome-card theme with Microsoft's
   button), plus `public/assets/css/hte-auth.css` (new). An upstream change to either view conflicts at
   the rebase: take upstream's change into HTE's version by hand.
+- The sign-in page names the e-mail domain from `HTE_SIGNIN_DOMAIN` (`config/hte.php`; empty: "your work
+  Microsoft account").
 - Test: `tests/Hte/BrandTest.php`.
 
 ## 1.14.0-hte.3 (2026-10-16) on upstream 1.14.0
