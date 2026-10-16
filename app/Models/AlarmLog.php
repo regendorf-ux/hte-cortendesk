@@ -30,6 +30,7 @@ class AlarmLog extends Model
         // the client's types start at 0 and the range below 100 is left to it.
         100 => ['label' => 'Console brute force', 'severity' => 'danger'],
         101 => ['label' => 'Console password spraying', 'severity' => 'danger'],
+        102 => ['label' => "Session refused: outside the person's access", 'severity' => 'danger'], // HTE: per-person reach
     ];
 
     /** Repeated failed sign-ins against one console account. */

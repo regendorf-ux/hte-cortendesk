@@ -28,6 +28,7 @@ use Livewire\Component;
 class SettingsPage extends Component
 {
     use AuthorizesConsole;
+    use \App\Hte\ScopeSettings; // HTE: per-person reach
 
     // Active settings tab — held server-side so it survives the Livewire morph
     // after a save (Bootstrap's JS tab state would reset on re-render).
@@ -424,6 +425,7 @@ class SettingsPage extends Component
             Setting::put('server_ip_match', $this->serverIpMatch ? '1' : '0');
             ConsoleAudit::record('settings.server-ip-match', 'Signed-out devices '.($this->serverIpMatch ? 'identified' : 'not identified').' by IP address', 'settings', null);
         }
+        $this->hteSave(); // HTE: per-person reach
         Setting::put('two_factor_required', $this->twoFactorRequired ? '1' : '0');
         Setting::put('two_factor_required_admins', $this->twoFactorRequiredAdmins ? '1' : '0');
 

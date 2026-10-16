@@ -165,6 +165,7 @@
                                         <label class="form-check-label" for="serverIpMatch">Identify signed-out devices by IP address</label>
                                     </div>
                                     <div class="form-text">Approved devices only: lets a signed-out client start sessions when an approved device registered from the same IP. Weak: devices sharing a public IP, or behind a proxy that rewrites source addresses (Docker's userland proxy, IPv6 port publishing, Docker Desktop), can pass as each other.</div>
+                                    @include('hte.settings-scope') {{-- HTE: per-person reach --}}
                                     @php $linkTone = $serverLink['ok'] === true ? 'text-success' : ($serverLink['ok'] === false ? 'text-danger' : 'text-muted'); @endphp
                                     <div class="form-text {{ $linkTone }}" id="server-link-status">
                                         <i class="{{ $serverLink['ok'] === false ? 'ri-error-warning-line' : 'ri-link' }} me-1"></i>ID server link: {{ $serverLink['note'] }}

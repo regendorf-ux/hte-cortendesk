@@ -1,0 +1,46 @@
+# HTE's changes to CortenDesk
+
+This fork is HTE, Inc.'s copy of [CortenDesk](https://github.com/marcpope/cortendesk) (AGPL-3.0)
+for HTE Remote. Branch `hte` = the upstream release tag plus the commits below. This file is the
+statement of modifications the AGPL asks for (section 5(a)), kept apart from upstream's history so
+merges stay clean. The ID server side is [regendorf-ux/hte-cortendesk-server](https://github.com/regendorf-ux/hte-cortendesk-server).
+
+## 1.14.0-hte.1 (2026-10-16) on upstream 1.14.0
+
+**Per-person reach, enforced by the ID server.** The console already decides which devices a
+signed-in person sees; with the setting on, the HTE build of hbbs refuses a session to any device
+outside that set. HTE code lives in `app/Hte/` and `resources/views/hte/`:
+
+- `app/Hte/Reach.php`: the `scope` block added to `GET /api/server/policy` (per active user:
+  `name`, `all` for administrators, else `devices` = `Device::visibleTo()`; `token_users` = sha256 of
+  each live client token -> user id; disabled people and expired tokens drop out), the "who can
+  reach this device" sections for the device page, the newest refusal, and the alarm rows
+  (type 102, console source = administrators only) for refusals hbbs reports.
+- `app/Hte/ScopeSettings.php`: Livewire trait for the Settings -> Server switch "Each person may
+  reach only the devices they are given" (`hte_scope_enforce`, off by default) and its status line,
+  which warns when the linked ID server is not the HTE build.
+- `app/Hte/RefusalsController.php`: `POST /api/server/refusals` (shared-secret middleware), one
+  alarm per refusal plus a security-alarm notification.
+- `resources/views/hte/settings-scope.blade.php`, `resources/views/hte/device-reach.blade.php`.
+- Tests: `tests/Hte/ReachTest.php` (Pest; `phpunit.xml`, `tests/Pest.php`, `tests/TestCase.php` are
+  HTE's, upstream ships no tests). Run them with `docker/hte-test.Dockerfile`.
+
+Hooks in upstream files, each marked `HTE`: `app/Services/ServerLink.php` (one key in the policy),
+`routes/api.php` (one route), `app/Livewire/SettingsPage.php` (`use` the trait, `hteSave()` in
+`save()`), the two blades (one `@include` each), `app/Models/AlarmLog.php` (type 102), `Dockerfile`
+(the server stage comes from `ghcr.io/regendorf-ux/hte-cortendesk-server`), `.dockerignore`
+(`!tests`), `VERSION`.
+
+Build: `.github/workflows/hte-image.yml` (push a tag `v<upstream>-hte.<n>` or run it by hand): tests,
+then `ghcr.io/regendorf-ux/hte-cortendesk:<upstream>-hte.<n>`, amd64.
+
+## Rebuilding on a new upstream release
+
+```
+git fetch origin --tags                 # origin = marcpope/cortendesk
+git checkout hte && git rebase v<new>   # resolve: the hooks above are small
+# VERSION -> <new>-hte.1; Dockerfile SERVER_VERSION -> the HTE server tag; add a section here
+docker build -f docker/hte-test.Dockerfile -t t . && docker run --rm t
+git push -f hte hte && git tag v<new>-hte.1 && git push hte v<new>-hte.1
+```
+Rebuild the server image first when upstream's console pins a newer `cortendesk-server`.

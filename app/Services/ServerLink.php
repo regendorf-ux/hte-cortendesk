@@ -101,6 +101,7 @@ class ServerLink
             'incoming_only' => $incomingOnly,
             'tokens' => (object) $tokens,
             'ip_match' => self::ipMatch(),
+            'scope' => \App\Hte\Reach::policyBlock(), // HTE: per-person reach
         ];
     }
 
