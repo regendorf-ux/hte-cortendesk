@@ -8,6 +8,14 @@ merges stay clean. The ID server side is [regendorf-ux/hte-cortendesk-server](ht
 
 **What this repository may hold (Osvaldo, 2026-10-16):** HTE's code and placeholders, nothing else. HTE's server addresses, keys, e-mail domain, device IDs and host names live in `/opt/cortendesk/.env` on the VPS, the Mac's gitignored files, the private hte-apps repository and GitHub secrets. The history was rewritten on 2026-10-16 to take out what had been committed.
 
+## 1.14.0-hte.6 (2026-10-16) on upstream 1.14.0
+
+- The rest of the sign-in pages say HTE Remote: the wordmark in `auth/{two-factor-challenge,
+  password-request,password-reset,email-challenge,invite,oidc-client-result}` and `downloads/index`
+  ("HTE Remote" in place of "CortenDesk", one line each), the client sign-in result's words
+  (`oidc-client-result.blade.php`, `Api/ClientOidcController.php`: "return to HTE Remote"), and the guest
+  layout loads `hte-brand.css` so those pages are blue too.
+
 ## 1.14.0-hte.5 (2026-10-16) on upstream 1.14.0
 
 - HTE's own values out of the repository: the sign-in page names the e-mail domain from

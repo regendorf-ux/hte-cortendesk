@@ -17,6 +17,7 @@
     <link href="{{ \App\Support\Asset::url('assets/css/spacing.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ \App\Support\Asset::url('assets/css/shell.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ \App\Support\Asset::url('assets/css/cortendesk.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ \App\Support\Asset::url('assets/css/hte-brand.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ \App\Support\Asset::url('assets/css/hte-auth.css') }}" rel="stylesheet" type="text/css"/>
 </head>
 
