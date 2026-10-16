@@ -8,6 +8,13 @@ merges stay clean. The ID server side is [regendorf-ux/hte-cortendesk-server](ht
 
 **What this repository may hold (Osvaldo, 2026-10-16):** HTE's code and placeholders, nothing else. HTE's server addresses, keys, e-mail domain, device IDs and host names live in `/opt/cortendesk/.env` on the VPS, the Mac's gitignored files, the private hte-apps repository and GitHub secrets. The history was rewritten on 2026-10-16 to take out what had been committed.
 
+## 1.14.0-hte.5 (2026-10-16) on upstream 1.14.0
+
+- HTE's own values out of the repository: the sign-in page names the e-mail domain from
+  `HTE_SIGNIN_DOMAIN` (`config/hte.php`; empty: "your work Microsoft account"). Set in `/opt/cortendesk/.env`.
+- The history of this branch was rewritten (HTE's addresses, key, domain, device IDs and host names out
+  of every HTE commit; commits authored with the GitHub no-reply address). Upstream commits unchanged.
+
 ## 1.14.0-hte.4 (2026-10-16) on upstream 1.14.0
 
 **HTE Remote's branding lives in the fork** (Osvaldo: blue accent, HTE Remote mark and name, sidebar
