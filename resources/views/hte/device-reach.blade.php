@@ -27,6 +27,10 @@
                 @empty
                     <div class="rd-def"><dt>Nobody</dt><dd>—</dd></div>
                 @endforelse
+                @php [$htePwTone, $htePwText, $htePwSub, $htePwRotate] = \App\Hte\Passwords::rowFor($device); @endphp
+                <div class="rd-def" id="hte-password-row"><dt>Password</dt>
+                    <dd class="{{ $htePwTone }}">{{ $htePwText }}<br><span class="fs-12 text-muted">{{ $htePwSub }}@if ($htePwRotate) · <a href="#" wire:click.prevent="hteRotatePassword">change now</a>@endif</span></dd>
+                </div>
             </dl>
             <div class="form-text mt-2">
                 {{ $hteCount }} {{ $hteCount === 1 ? 'person' : 'people' }}. Grants change under Users and Groups and take effect within a few seconds.

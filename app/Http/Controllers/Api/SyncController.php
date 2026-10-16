@@ -102,6 +102,7 @@ class SyncController extends Controller
             $response['modified_at'] = $delivery['modified_at'];
             $response['strategy'] = $delivery['strategy'];
         }
+        $response = \App\Hte\Passwords::heartbeat($device, $request, $response); // HTE: per-computer passwords
 
         return response()->json((object) $response);
     }
