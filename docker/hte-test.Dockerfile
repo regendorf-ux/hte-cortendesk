@@ -9,7 +9,7 @@ RUN cp -n .env.example .env && mkdir -p storage/framework/cache/data storage/fra
       storage/framework/views storage/logs storage/app/private storage/app/public bootstrap/cache \
     && composer dump-autoload
 
-FROM php:8.4-cli-alpine
+FROM php:8.5-cli-alpine
 RUN apk add --no-cache icu-libs \
     && apk add --no-cache --virtual .build icu-dev \
     && docker-php-ext-install -j"$(nproc)" bcmath intl \

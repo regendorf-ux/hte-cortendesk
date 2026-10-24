@@ -8,6 +8,17 @@ merges stay clean. The ID server side is [regendorf-ux/hte-cortendesk-server](ht
 
 **What this repository may hold (Osvaldo, 2026-10-16):** HTE's code and placeholders, nothing else. HTE's server addresses, keys, e-mail domain, device IDs and host names live in `/opt/cortendesk/.env` on the VPS, the Mac's gitignored files, the private hte-apps repository and GitHub secrets. The history was rewritten on 2026-10-16 to take out what had been committed.
 
+## 1.15.0-hte.1 (2026-10-24) on upstream 1.15.0
+
+- Rebased on upstream 1.15.0 (HTE's code unchanged). Upstream's changes taken: **PHP 8.5.12 in the
+  image** (fixes CVE-2026-109618/-109619, unauthenticated remote code execution; the build refuses an
+  older PHP base), and **signing in from the client, SSO included, now registers or approves the device
+  and makes the person its owner** (`DeviceEnrollment::signedIn`; upstream #110). That second change is
+  what a computer needed when its person signed in with Microsoft after it had first checked in: it had
+  stayed "pending" with no owner.
+- The test image (`docker/hte-test.Dockerfile`) now runs on PHP 8.5 to match.
+- Only conflict at the rebase: `VERSION`.
+
 ## 1.14.0-hte.6 (2026-10-16) on upstream 1.14.0
 
 - The rest of the sign-in pages say HTE Remote: the wordmark in `auth/{two-factor-challenge,
