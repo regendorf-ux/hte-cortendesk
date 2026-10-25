@@ -8,6 +8,18 @@ merges stay clean. The ID server side is [regendorf-ux/hte-cortendesk-server](ht
 
 **What this repository may hold (Osvaldo, 2026-10-16):** HTE's code and placeholders, nothing else. HTE's server addresses, keys, e-mail domain, device IDs and host names live in `/opt/cortendesk/.env` on the VPS, the Mac's gitignored files, the private hte-apps repository and GitHub secrets. The history was rewritten on 2026-10-16 to take out what had been committed.
 
+## Archived (2026-10-25): the PHP console is retired from HTE Remote
+
+From phase 9 on, HTE Remote's console is `hte-console` (Rust) inside the all-in-one server image `hte-cortendesk-server:1.1.1-hte.4`
+(see `HTE.md` in [regendorf-ux/hte-cortendesk-server](https://github.com/regendorf-ux/hte-cortendesk-server)). This repository is the **archived PHP
+source**: its last HTE version is 1.15.0-hte.1; nothing builds from it any more. Do not delete it:
+- it is the source of the AGPL-3.0 programme HTE ran and, for the period until the PHP images are removed, still can run; the statement of
+  modifications below stays here and the source stays available to the users of that service;
+- the migration list (41 migrations) is the schema `hte-console migrate` checks, and `hte-console/scripts/check-migrations.sh` compares against it;
+- the PHP images (`ghcr.io/regendorf-ux/hte-cortendesk:1.15.0-hte.1`, hte-console 0.8.x) are the rollback; the stopped containers
+  `cortendesk-php-old` and `hte-console-php-old` hold them on the VPS for 30 days after the cutover.
+Not offered by the replacement: TOTP and e-mailed codes, Apprise notifications, Livewire pages, invitations and password reset pages.
+
 ## 1.15.0-hte.1 (2026-10-24) on upstream 1.15.0
 
 - Rebased on upstream 1.15.0 (HTE's code unchanged). Upstream's changes taken: **PHP 8.5.12 in the
