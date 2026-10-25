@@ -22,7 +22,8 @@ source**: its last HTE version is 1.15.0-hte.1; nothing builds from it any more.
   `cortendesk-php-old` and `hte-console-php-old` hold them on the VPS for 30 days after the cutover. This image reads only `CORTENDESK_*`
   settings: the rollback puts back the `.env` files with those names. Archives HTE Remote writes are `hte-remote-backup-*.tar` in this format:
   rename one to `cortendesk-backup-<same stamp>.tar` to restore it here.
-Not offered by the replacement: TOTP and e-mailed codes, Apprise notifications, Livewire pages, invitations and password reset pages.
+Not offered by the replacement: Apprise notifications, Livewire, the client downloads page. (Two-factor, e-mailed codes, mail, invitations and
+password reset are served by hte-console since 0.8.2.)
 
 ## 1.15.0-hte.1 (2026-10-24) on upstream 1.15.0
 
