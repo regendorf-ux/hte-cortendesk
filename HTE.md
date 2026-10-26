@@ -14,13 +14,12 @@ From phase 9 on, HTE Remote's console is `hte-console` (Rust) inside HTE Remote'
 (git tag `hte-rd-server-v2.0.0`; see `HTE.md` and `NOTICE` in [regendorf-ux/hte-cortendesk-server](https://github.com/regendorf-ux/hte-cortendesk-server)).
 HTE Remote is its own program now (own name and versions); it credits CortenDesk in its About page and NOTICE. This repository is the **archived PHP
 source**: its last HTE version is 1.15.0-hte.1; nothing builds from it any more. Do not delete it:
-- it is the source of the AGPL-3.0 programme HTE ran and, until the PHP images are removed, still can run; the statement of modifications below
+- it is the source of the AGPL-3.0 programme HTE ran and, could run until the PHP image was removed from the VPS; the statement of modifications below
   stays here and the source stays available to the users of that service;
 - the migration list (41 migrations) is the schema `hte-console migrate` checks, and `hte-console/scripts/check-migrations.sh` compares against it;
   HTE Remote keeps this console's database, table, cache-key and archive-manifest names so that this image can come back;
-- the PHP images (`ghcr.io/regendorf-ux/hte-cortendesk:1.15.0-hte.1`, hte-console 0.8.x) are the rollback; the stopped containers
-  `cortendesk-php-old` and `hte-console-php-old` hold them on the VPS for 30 days after the cutover. This image reads only `CORTENDESK_*`
-  settings: the rollback puts back the `.env` files with those names. Archives HTE Remote writes are `hte-remote-backup-*.tar` in this format:
+- the PHP containers and image were removed from the VPS on 2026-10-25 (Osvaldo's decision); the image
+  (`ghcr.io/regendorf-ux/hte-cortendesk:1.15.0-hte.1`) remains on GHCR. This image reads only `CORTENDESK_*` settings. Archives HTE Remote writes are `hte-remote-backup-*.tar` in this format:
   rename one to `cortendesk-backup-<same stamp>.tar` to restore it here.
 Not offered by the replacement: Apprise notifications, Livewire, the client downloads page. (Two-factor, e-mailed codes, mail, invitations and
 password reset are served by hte-console since 0.8.2.)
